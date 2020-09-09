@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+            #timer-text
+            {
+                border: 1px solid black;
+                border-radius: 5px;
+                padding: 5px;
+            }
+            #timer-text-expired
+            {
+                border: 1px solid red;
+                border-radius: 5px;
+                padding: 5px;
+                color:red;
+                animation: blinker 1s linear infinite;
+            }
+            @keyframes blinker {
+              50% {
+                opacity: 0;
+              }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="timer">
+            <span id="timer-text">02:59:59</span>
+        </div>
+        <script src="jquery.min.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function(){
+                const maxHours = 2;
+                const maxMins = 59;
+                const maxSeconds = 59;
+                var hours = maxHours;
+                var mins = maxMins;
+                var seconds = maxSeconds;
+                var intervalHandle;
+                var timerCleared = false;
+                intervalHandle = setInterval(function(){
+                    //console.log(seconds);
+                    seconds--;
+                    if(seconds === 0)
+                    {
+                        mins--;
+                        if(mins === 0)
+                        {
+                            hours--;
+                            if(hours<0)
+                            {
+                               clearInterval(intervalHandle);
+                               timerCleared = true;
+                            }
+                            mins = maxMins;
+                        }
+                        seconds = maxSeconds;
+                    }
+                    if(timerCleared)
+                    {
+                        seconds = 0;
+                        mins = 0;
+                        hours = 0;
+                        
+                    }
+                    
+                    $("#timer-text").html(formatTimeTicks(hours)+":"+formatTimeTicks(mins)+":"+formatTimeTicks(seconds));
+                    if(timerCleared)
+                    {
+                        $("#timer-text").attr("id","timer-text-expired");
+                    }
+                }, 1000);
+                function formatTimeTicks(tick)
+                {
+                    if(tick<10)
+                    {
+                        return "0"+tick;
+                    }
+                    return tick;
+                }
+           });
+        </script>
+        
+    </body>
+</html>
